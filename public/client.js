@@ -2,8 +2,10 @@ var ENTER_KEY = 13;
 var newTodoDom = document.getElementById("new-todo");
 var syncDom = document.getElementById("sync-wrapper");
 
-var db = new PouchDB("todoss");
-var remoteCouch = 'https://panoramic-chronometer.glitch.me/db'; // enable remote sync.
+
+var dbName = "todoss"; // name of your database 
+var db = new PouchDB(dbName);
+var remoteCouch = 'https://adahacks2019.glitch.me/db/' + dbName; // enable remote sync. Set to "false" to disable
 
 addTodo(db, "testing todo");
 
@@ -11,6 +13,11 @@ db.changes({
   since: "now",
   live: true
 }).on("change", showTodos);
+
+
+db.info().then(function (info) {
+  console.log(info);
+})
 
 // We have to create a new todo document and enter it in the database
 function addTodo(text) {
@@ -67,7 +74,8 @@ function sync() {
 // EDITING STARTS HERE (you dont need to edit anything below this line)
 
 // There was some form or error syncing
-function syncError() {
+function syncError(err) {
+  console.log(err)
   syncDom.setAttribute("data-sync-state", "error");
 }
 

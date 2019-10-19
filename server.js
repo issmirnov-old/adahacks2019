@@ -8,16 +8,11 @@ var helmet = require('helmet')
 var PouchDB = require("pouchdb-node");
 
 const app = express();
+//app.use(helmet()) // secure http headers.
 
 // create pouchdb database in .data
 var TempPouchDB = PouchDB.defaults({prefix: '.data'})
-
-
-app.use(helmet()) // secure http headers.
 app.use('/db', require('express-pouchdb')(TempPouchDB));
-
-var db = new PouchDB("todoss");
-var remoteCouch = 'https://panoramic-chronometer.glitch.me/db';
 
 // tell express web server where our files live
 app.use(express.static("public"));
